@@ -5,10 +5,16 @@ main {
   justify-content: center;
   align-items: center;
   background-color: #6C698D;
-  
+  border-radius: 8px;
 }
 
 main {
   background-color: #6C698D;
-  
+  font-family: "Martian Mono", monospace;
+  color: #D9D9D9;
+  justify-content: start;
+}
+
+main p {
+  margin: 20px;
 }
