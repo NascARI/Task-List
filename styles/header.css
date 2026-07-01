@@ -1,0 +1,42 @@
+header {
+  height: 100%;
+  width: 524px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+span {
+  width: auto;
+  height: auto;
+  font-family: "Martian Mono", monospace;
+  font-size: 2rem;
+}
+
+
+button {
+  font-family: "Martian Mono", monospace;
+  font-size: 0.7rem;
+  
+
+}
+
+
+#primary-btn {
+  width: 150px;
+  height: 52px;
+  border: none;
+  background-color:  #6C698D;
+  color: #D9D9D9;
+  margin-left: 20px;
+  border-radius: 8px;
+  
+}
