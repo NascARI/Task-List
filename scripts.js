@@ -7,11 +7,11 @@ function addItem(texto = "Nova tarefa"){
 
   task.innerHTML = 
  `<button class="check-box">
-      <img src="assets/Frame 11.svg" alt="Marcar tarefa">
+      <img src="Frame 11.svg" alt="Marcar tarefa">
     </button>
     <p contenteditable="false">${texto}</p>
     <button class="delete">
-      <img src="assets/Frame 9.svg" alt="Excluir tarefa">
+      <img src="Frame 9.svg" alt="Excluir tarefa">
     </button>`;
     
 
@@ -24,7 +24,7 @@ function addItem(texto = "Nova tarefa"){
   function atualizarIMGCheckbox(task ) {
     const img = task.querySelector(".check-box img");
     const marcado = task.classList.contains("done")
-    img.src = marcado? "assets/Rectangle 4.svg" : "assets/Frame 11.svg"
+    img.src = marcado? "Rectangle 4.svg" : "Frame 11.svg"
   }
 
 
