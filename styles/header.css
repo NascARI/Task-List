@@ -12,6 +12,7 @@ header > div {
   justify-content: space-between;
   width: 100%;
   gap: 20px;
+
 }
 
 span {
@@ -19,12 +20,15 @@ span {
   height: auto;
   font-family: "Martian Mono", monospace;
   font-size: 2rem;
+  font-weight: 600;
+  color: #3E3B62;
 }
 
 
 button {
   font-family: "Martian Mono", monospace;
   font-size: 0.7rem;
+  font-weight: 600;
   
 
 }
