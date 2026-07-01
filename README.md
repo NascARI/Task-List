@@ -1,6 +1,6 @@
 # Task-List
-Projeto simples de lista de tarefas utilizando HTML, CSS e JavaScript
-Com interface feita no Figma [Visite o meu projeto no Figma](https://www.figma.com/design/yr6awRAnq81uifmxE6BgIo/Task-List?node-id=0-1&t=2JscnKVk3UMUslcP-1)   
+- Projeto simples de lista de tarefas utilizando HTML, CSS e JavaScript
+- Com interface feita no Figma [Visite o meu projeto no Figma](https://www.figma.com/design/yr6awRAnq81uifmxE6BgIo/Task-List?node-id=0-1&t=2JscnKVk3UMUslcP-1)   
 
 ## Funcionalidades
 
