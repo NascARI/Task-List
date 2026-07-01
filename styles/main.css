@@ -1,8 +1,9 @@
 main {
-  width: 524px;
-  min-height: 59px;
+  width: 500px;
+  min-height: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content:start;
   align-items: center;
   background-color: #6C698D;
   border-radius: 8px;

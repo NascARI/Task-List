@@ -1,0 +1,90 @@
+div .task {
+
+}
+
+.task {
+  width: 450px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  background-color: #d9d5db; 
+  border-radius: 8px;
+  font-size: 0.5rem;
+  margin: 20px;
+}
+
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.task-title-group h1 {
+  margin: 0 0 4px 0;
+  font-size: 1.4rem;
+  color: #4b3f66;
+  font-size: 1rem;
+}
+
+.task-title-group h3 {
+  margin: 0;
+  font-weight: 400;
+  color: #8b8394;
+  font-size: 0.5rem;
+}
+
+.status p {
+  margin: 0;
+  color: #2e7d32; 
+  font-weight: 600;
+}
+
+
+.task-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dificult {
+  background-color: #8c7fc4;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.dificult p {
+  margin: 0;
+}
+
+.term p {
+  margin: 0;
+  color: #6b6472;
+}
+
+.task-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit p {
+  margin: 0;
+  color: #6b6472;
+  cursor: pointer;
+}
+
+.remove p {
+  margin: 0;
+  color: #d9534f;
+  cursor: pointer;
+}
