@@ -25,7 +25,40 @@
       </div>
       
     </main>
+    <div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>Adicionar tarefa</h2>
 
+    <form id="form-tarefa">
+      <label for="input-titulo">Título</label>
+      <input type="text" id="input-titulo" required>
+
+      <label for="input-descricao">Descrição</label>
+      <textarea id="input-descricao" required></textarea>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label for="input-dificuldade">Dificuldade</label>
+          <select id="input-dificuldade">
+            <option value="Fácil">Fácil</option>
+            <option value="Médio">Médio</option>
+            <option value="Difícil">Difícil</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label for="input-prazo">Prazo</label>
+          <input type="date" id="input-prazo" required>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" id="btn-cancelar">Cancelar</button>
+        <button type="submit" id="btn-salvar">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
   <script src="scripts.js"></script>
 </body>
 </html>
