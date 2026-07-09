@@ -1,4 +1,4 @@
-//Selecionando as funções a serem criadas
+// Selecionando os elementos principais
 
 const btnNovaTarefa = document.getElementById('primary-btn');
 const main = document.querySelector('main');
@@ -6,21 +6,58 @@ const contador = document.getElementById('count');
 const modalOverlay = document.getElementById('modal-overlay');
 const formTarefa = document.getElementById('form-tarefa');
 const btnCancelar = document.getElementById('btn-cancelar');
+const modalTitulo = document.getElementById('modal-titulo');
+
+const inputTitulo = document.getElementById('input-titulo');
+const inputDescricao = document.getElementById('input-descricao');
+const inputDificuldade = document.getElementById('input-dificuldade');
+const inputPrazo = document.getElementById('input-prazo');
 
 let totalTarefas = 0;
 
 
-//Criar nova tarefa
+let tarefaEmEdicao = null;
+let dadosEmEdicao = null; 
+
+
 
 btnNovaTarefa.addEventListener('click', () => {
-  modalOverlay.classList.add('ativo');
+  abrirModalCriacao();
 });
 
-//Fechar modal ao criar tarefa
+function abrirModalCriacao() {
+  tarefaEmEdicao = null;
+  dadosEmEdicao = null;
+
+  modalTitulo.textContent = 'Adicionar tarefa';
+  formTarefa.reset();
+
+  modalOverlay.classList.add('ativo');
+}
+
+
+
+function abrirModalEdicao(task, dados) {
+  tarefaEmEdicao = task;
+  dadosEmEdicao = dados;
+
+  modalTitulo.textContent = 'Editar tarefa';
+
+  inputTitulo.value = dados.titulo;
+  inputDescricao.value = dados.descricao;
+  inputDificuldade.value = dados.dificuldade;
+  inputPrazo.value = converterParaISO(dados.data);
+
+  modalOverlay.classList.add('ativo');
+}
+
+
 
 function fecharModal() {
   modalOverlay.classList.remove('ativo');
   formTarefa.reset();
+  tarefaEmEdicao = null;
+  dadosEmEdicao = null;
 }
 
 btnCancelar.addEventListener('click', fecharModal);
@@ -31,36 +68,52 @@ modalOverlay.addEventListener('click', (event) => {
   }
 });
 
-// Formatação padrão da task
+
 
 formTarefa.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  const dados = {
-    titulo: document.getElementById('input-titulo').value,
-    descricao: document.getElementById('input-descricao').value,
-    status: 'Não iniciado',
-    dificuldade: document.getElementById('input-dificuldade').value,
-    data: formatarData(document.getElementById('input-prazo').value)
+  const dadosFormulario = {
+    titulo: inputTitulo.value.trim(),
+    descricao: inputDescricao.value.trim(),
+    dificuldade: inputDificuldade.value,
+    data: formatarData(inputPrazo.value)
   };
 
-  criarTarefa(dados);
+  if (tarefaEmEdicao) {
+   
+    const novosDados = {
+      ...dadosFormulario,
+      status: dadosEmEdicao.status
+    };
+    renderizarTask(tarefaEmEdicao, novosDados);
+    animarSalvo(tarefaEmEdicao);
+  } else {
+   
+    criarTarefa({
+      ...dadosFormulario,
+      status: 'Não iniciado'
+    });
+  }
+
   fecharModal();
 });
 
-//Formatação da data
+
+
 
 function formatarData(dataISO) {
   const [ano, mes, dia] = dataISO.split('-');
   return `${dia}/${mes}/${ano}`;
 }
 
+
 function converterParaISO(dataBR) {
   const [dia, mes, ano] = dataBR.split('/');
   return `${ano}-${mes}-${dia}`;
 }
 
-//Aplicação da cor do status de acordo com o seu estado
+
 
 function aplicarCorStatus(elementoStatus, status) {
   elementoStatus.classList.remove('status-finalizado', 'status-iniciado', 'status-nao-iniciado');
@@ -77,7 +130,52 @@ function aplicarCorStatus(elementoStatus, status) {
   }
 }
 
-// ---------- Criar tarefa ----------
+
+
+
+const ORDEM_STATUS = ['Não iniciado', 'Iniciado', 'Finalizado'];
+
+function proximoStatus(statusAtual) {
+  const indexAtual = ORDEM_STATUS.indexOf(statusAtual);
+
+  const proximoIndex = indexAtual === -1 ? 0 : (indexAtual + 1) % ORDEM_STATUS.length;
+  return ORDEM_STATUS[proximoIndex];
+}
+
+
+
+function animarSalvo(task) {
+
+  task.classList.remove('task-salva');
+  void task.offsetWidth; 
+  task.classList.add('task-salva');
+
+
+  task.addEventListener('animationend', () => {
+    task.classList.remove('task-salva');
+  }, { once: true });
+}
+
+
+
+function removerTask(task) {
+ 
+  const alturaAtual = task.getBoundingClientRect().height;
+  task.style.height = alturaAtual + 'px';
+
+  void task.offsetWidth; 
+
+  task.classList.add('task-saindo');
+
+
+  task.addEventListener('transitionend', () => {
+    task.remove();
+    totalTarefas--;
+    atualizarContador();
+  }, { once: true });
+}
+
+
 
 function criarTarefa(dados) {
   const task = document.createElement('div');
@@ -89,10 +187,10 @@ function criarTarefa(dados) {
 
   totalTarefas++;
   atualizarContador();
+  animarSalvo(task);
 }
 
 
-//Estrutura HTML para crição da task 
 
 function renderizarTask(task, dados) {
   task.innerHTML = `
@@ -126,95 +224,57 @@ function renderizarTask(task, dados) {
   const statusEl = task.querySelector('.status p');
   aplicarCorStatus(statusEl, dados.status);
 
+  
+  statusEl.addEventListener('click', () => {
+    dados.status = proximoStatus(dados.status);
+    statusEl.textContent = dados.status;
+    aplicarCorStatus(statusEl, dados.status);
+  });
+
+ 
+
+
+statusEl.addEventListener('click', () => {
+  dados.status = proximoStatus(dados.status);
+  statusEl.textContent = dados.status;
+  aplicarCorStatus(statusEl, dados.status);
+  
+ 
+  animarMudancaStatus(statusEl);
+});
+
   const btnEditar = task.querySelector('.edit');
   const btnRemover = task.querySelector('.remove');
 
   btnEditar.addEventListener('click', () => {
-    editarTarefa(task, dados);
+    abrirModalEdicao(task, dados);
   });
 
   btnRemover.addEventListener('click', () => {
-    task.remove();
-    totalTarefas--;
-    atualizarContador();
+    removerTask(task);
   });
 }
 
-
-//Após a criação da task, essa função edita a tarefa
-
-function editarTarefa(task, dados) {
-  const tituloEl = task.querySelector('.task-title-group h1');
-  const descricaoEl = task.querySelector('.task-title-group h3');
-  const statusEl = task.querySelector('.status p');
-  const dificuldadeEl = task.querySelector('.dificult p');
-  const dataEl = task.querySelector('.term p');
-  const acoesEl = task.querySelector('.task-actions');
-
-  tituloEl.outerHTML = `<input type="text" class="edit-titulo" value="${dados.titulo}" required>`;
-  descricaoEl.outerHTML = `<textarea class="edit-descricao" required>${dados.descricao}</textarea>`;
-
-  dificuldadeEl.outerHTML = `
-    <select class="edit-dificuldade">
-      <option value="Fácil" ${dados.dificuldade === 'Fácil' ? 'selected' : ''}>Fácil</option>
-      <option value="Médio" ${dados.dificuldade === 'Médio' ? 'selected' : ''}>Médio</option>
-      <option value="Difícil" ${dados.dificuldade === 'Difícil' ? 'selected' : ''}>Difícil</option>
-    </select>
-  `;
-
-  dataEl.outerHTML = `<input type="date" class="edit-data" value="${converterParaISO(dados.data)}" required>`;
-
-  statusEl.outerHTML = `
-    <select class="edit-status">
-      <option value="Finalizado" ${dados.status === 'Finalizado' ? 'selected' : ''}>Finalizado</option>
-      <option value="Iniciado" ${dados.status === 'Iniciado' ? 'selected' : ''}>Iniciado</option>
-      <option value="Não iniciado" ${dados.status === 'Não iniciado' ? 'selected' : ''}>Não iniciado</option>
-    </select>
-  `;
-
-  acoesEl.innerHTML = `
-    <div class="cancelar-edicao"><p>Cancelar</p></div>
-    <div class="salvar"><p>Salvar</p></div>
-  `;
-
-  const btnSalvar = acoesEl.querySelector('.salvar');
-  btnSalvar.addEventListener('click', () => {
-    salvarEdicao(task, dados);
-  });
-
-  const btnCancelarEdicao = acoesEl.querySelector('.cancelar-edicao');
-  btnCancelarEdicao.addEventListener('click', () => {
-    renderizarTask(task, dados); // volta ao estado original, sem salvar nada
-  });
-}
-
-// Atualiza os dados da tarefa
-
-function salvarEdicao(task, dadosOriginais) {
-  const novoTitulo = task.querySelector('.edit-titulo').value.trim();
-  const novaDescricao = task.querySelector('.edit-descricao').value.trim();
-  const novoStatus = task.querySelector('.edit-status').value;
-  const novaDificuldade = task.querySelector('.edit-dificuldade').value;
-  const novaDataISO = task.querySelector('.edit-data').value;
-
-  if (!novoTitulo || !novaDescricao || !novaDataISO) {
-    alert('Preencha todos os campos antes de salvar.');
-    return;
-  }
-
-  const novosDados = {
-    titulo: novoTitulo,
-    descricao: novaDescricao,
-    status: novoStatus,
-    dificuldade: novaDificuldade,
-    data: formatarData(novaDataISO)
-  };
-
-  renderizarTask(task, novosDados);
-}
-
-// Atualização do contador de acordo com a quantidade de tarefas
+// ---------- Contador ----------
 
 function atualizarContador() {
   contador.textContent = `${totalTarefas} Tarefas`;
+}
+
+
+
+function animarMudancaStatus(elementoStatus) {
+  
+  elementoStatus.classList.remove('status-alterado');
+  
+  
+  void elementoStatus.offsetWidth; 
+  
+  
+  elementoStatus.classList.add('status-alterado');
+
+  
+  elementoStatus.addEventListener('animationend', () => {
+    elementoStatus.classList.remove('status-alterado');
+  }, { once: true });
 }

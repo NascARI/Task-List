@@ -97,3 +97,18 @@
   color: #d9534f;
   cursor: pointer;
 }
+
+.status p {
+  cursor: pointer;
+  user-select: none; 
+}
+
+#input-dificuldade {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#input-dificuldade:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px rgba(140, 127, 196, 0.4);
+  outline: none;
+}

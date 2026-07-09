@@ -13,3 +13,76 @@
     background-color: #D4D2D5;
     gap: 20px;
 }
+
+@keyframes entrarBarra {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation: entrarBarra 0.5s ease-out;
+}
+
+@keyframes pulsarSalvo {
+  0% {
+    box-shadow: 0 0 0 0 rgba(13, 154, 17, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(13, 154, 17, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(13, 154, 17, 0);
+  }
+}
+
+.task-salva {
+  animation: pulsarSalvo 0.6s ease-out;
+}
+
+.task {
+  transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.task-saindo {
+  opacity: 0;
+  transform: translateX(30px);
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-width: 0;
+}
+
+
+.status p.status-alterado {
+  animation: statusPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+
+@keyframes statusPop {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.15); 
+    filter: brightness(1.4); 
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+
+.status p {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  user-select: none; 
+}
