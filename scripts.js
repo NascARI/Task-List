@@ -192,11 +192,10 @@ function criarTarefa(dados) {
 
   renderizarTask(task, dados);
 
-  moverTaskParaGrupo(task, dados.status);
+  moverTaskParaGrupo(task, dados.status); // já dispara a animação de entrada
 
   totalTarefas++;
   atualizarContador();
-  animarSalvo(task);
 }
 
 // ---------- Renderizar a task (usada na criação e após editar) ----------
@@ -268,6 +267,18 @@ function animarMudancaStatus(elementoStatus) {
   }, { once: true });
 }
 
+// ---------- Animação de entrada da task no grupo ----------
+
+function animarEntradaTask(task) {
+  task.classList.remove('task-entrando');
+  void task.offsetWidth; // força reflow, permitindo reiniciar a animação
+  task.classList.add('task-entrando');
+
+  task.addEventListener('animationend', () => {
+    task.classList.remove('task-entrando');
+  }, { once: true });
+}
+
 // ---------- Grupos por status ----------
 
 // Mapeia cada status ao seu container correspondente no HTML
@@ -284,6 +295,7 @@ function moverTaskParaGrupo(task, status) {
   const grupo = GRUPOS[status];
   if (grupo) {
     grupo.appendChild(task);
+    animarEntradaTask(task);
   }
   atualizarVisibilidadeGrupos();
 }
@@ -295,6 +307,10 @@ function atualizarVisibilidadeGrupos() {
     secao.classList.toggle('vazio', lista.children.length === 0);
   });
 }
+
+// Roda uma vez ao carregar a página, para que seções sem nenhuma task
+// já comecem escondidas (em vez de aparecerem vazias até a primeira ação)
+atualizarVisibilidadeGrupos();
 
 // ---------- Contador ----------
 
