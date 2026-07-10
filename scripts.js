@@ -229,19 +229,10 @@ function renderizarTask(task, dados) {
     dados.status = proximoStatus(dados.status);
     statusEl.textContent = dados.status;
     aplicarCorStatus(statusEl, dados.status);
+
+    animarMudancaStatus(statusEl); 
   });
 
- 
-
-
-statusEl.addEventListener('click', () => {
-  dados.status = proximoStatus(dados.status);
-  statusEl.textContent = dados.status;
-  aplicarCorStatus(statusEl, dados.status);
-  
- 
-  animarMudancaStatus(statusEl);
-});
 
   const btnEditar = task.querySelector('.edit');
   const btnRemover = task.querySelector('.remove');
@@ -253,7 +244,13 @@ statusEl.addEventListener('click', () => {
   btnRemover.addEventListener('click', () => {
     removerTask(task);
   });
-}
+  
+ 
+  
+};
+
+  
+
 
 // ---------- Contador ----------
 
