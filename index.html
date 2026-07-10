@@ -7,58 +7,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task List</title>
   <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
-  
+
   <link rel="icon" type="image/png" href="TA SK.svg">
   <link rel="stylesheet" href="styles/index.css">
 </head>
 <body class="conteiner">
-    <header >
-      <div>
+  <header>
+    <div>
       <span id="Title"> Task list </span>
-        <button type="button" id="primary-btn">Nova Tarefa +</button>
-      </div>
-    </header>
-    <main>
-        <p id="count">
-          0 Tarefas
-        </p>
-      </div>
-      
-    </main>
-    <div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <h2 id="modal-titulo">Adicionar tarefa</h2>
+      <button type="button" id="primary-btn">Nova Tarefa +</button>
+    </div>
+  </header>
 
-    <form id="form-tarefa">
-      <label for="input-titulo">Título</label>
-      <input type="text" id="input-titulo" required>
+  <main>
+    <section class="task-group" data-status="Finalizado">
+      <h2 class="group-title">Tarefas Finalizadas</h2>
+      <div class="group-list" id="lista-finalizado"></div>
+    </section>
 
-      <label for="input-descricao">Descrição</label>
-      <textarea id="input-descricao" required></textarea>
+    <section class="task-group" data-status="Iniciado">
+      <h2 class="group-title">Tarefas Iniciadas</h2>
+      <div class="group-list" id="lista-iniciado"></div>
+    </section>
 
-      <div class="modal-row">
-        <div class="modal-field">
-          <label for="input-dificuldade">Dificuldade</label>
-          <select id="input-dificuldade">
-            <option value="Fácil">Fácil</option>
-            <option value="Médio">Médio</option>
-            <option value="Difícil">Difícil</option>
-          </select>
+    <section class="task-group" data-status="Não iniciado">
+      <h2 class="group-title">Tarefas Não Iniciadas</h2>
+      <div class="group-list" id="lista-nao-iniciado"></div>
+    </section>
+
+    <p id="count">0 Tarefas</p>
+  </main>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-titulo">Adicionar tarefa</h2>
+
+      <form id="form-tarefa">
+        <label for="input-titulo">Título</label>
+        <input type="text" id="input-titulo" required>
+
+        <label for="input-descricao">Descrição</label>
+        <textarea id="input-descricao" required></textarea>
+
+        <div class="modal-row">
+          <div class="modal-field">
+            <label for="input-dificuldade">Dificuldade</label>
+            <select id="input-dificuldade">
+              <option value="Fácil">Fácil</option>
+              <option value="Médio">Médio</option>
+              <option value="Difícil">Difícil</option>
+            </select>
+          </div>
+
+          <div class="modal-field">
+            <label for="input-prazo">Prazo</label>
+            <input type="date" id="input-prazo" required>
+          </div>
         </div>
 
-        <div class="modal-field">
-          <label for="input-prazo">Prazo</label>
-          <input type="date" id="input-prazo" required>
+        <div class="modal-actions">
+          <button type="button" id="btn-cancelar">Cancelar</button>
+          <button type="submit" id="btn-salvar">Salvar</button>
         </div>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" id="btn-cancelar">Cancelar</button>
-        <button type="submit" id="btn-salvar">Salvar</button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
+
   <script src="scripts.js"></script>
 </body>
 </html>
