@@ -1,13 +1,10 @@
-// Selecionando os elementos principais
-
 const btnNovaTarefa = document.getElementById('primary-btn');
 const main = document.querySelector('main');
 const contador = document.getElementById('count');
 const modalOverlay = document.getElementById('modal-overlay');
 const formTarefa = document.getElementById('form-tarefa');
 const btnCancelar = document.getElementById('btn-cancelar');
-const modalTitulo = document.getElementById('modal-titulo');
-
+const modalTitulo = document.getElementById('modal-titulo');8
 const inputTitulo = document.getElementById('input-titulo');
 const inputDescricao = document.getElementById('input-descricao');
 const inputDificuldade = document.getElementById('input-dificuldade');
@@ -15,7 +12,6 @@ const inputPrazo = document.getElementById('input-prazo');
 
 let totalTarefas = 0;
 
-// Navegação entre telas
 const navBotoes = document.querySelectorAll('.nav-icon');
 const views = {
   tarefas: document.getElementById('view-tarefas'),
@@ -23,16 +19,12 @@ const views = {
   historico: document.getElementById('view-historico')
 };
 
-// Histórico de tarefas concluídas
+
 const listaHistorico = document.getElementById('historico-lista');
 let historico = [];
 
-// Controla se o modal está criando uma tarefa nova ou editando uma existente.
-// null = modo criação. Uma referência à div.task = modo edição.
 let tarefaEmEdicao = null;
-let dadosEmEdicao = null; // guarda os dados que o modal não edita (ex: status)
-
-// ---------- Abrir modal (criação) ----------
+let dadosEmEdicao = null; 
 
 btnNovaTarefa.addEventListener('click', () => {
   abrirModalCriacao();
@@ -48,7 +40,7 @@ function abrirModalCriacao() {
   modalOverlay.classList.add('ativo');
 }
 
-// ---------- Abrir modal (edição) ----------
+
 
 function abrirModalEdicao(task, dados) {
   tarefaEmEdicao = task;
@@ -64,7 +56,7 @@ function abrirModalEdicao(task, dados) {
   modalOverlay.classList.add('ativo');
 }
 
-// ---------- Fechar modal ----------
+
 
 function fecharModal() {
   modalOverlay.classList.remove('ativo');
@@ -81,7 +73,7 @@ modalOverlay.addEventListener('click', (event) => {
   }
 });
 
-// ---------- Navegação entre Tarefas / Perfil / Histórico ----------
+
 
 function mostrarView(nomeView) {
   Object.entries(views).forEach(([nome, secao]) => {
@@ -95,10 +87,10 @@ function mostrarView(nomeView) {
   });
 }
 
-// Fade + leve deslize toda vez que uma tela é exibida
+
 function animarEntradaView(secao) {
   secao.classList.remove('view-entrando');
-  void secao.offsetWidth; // força reflow, permitindo reiniciar a animação
+  void secao.offsetWidth;
   secao.classList.add('view-entrando');
 
   secao.addEventListener('animationend', () => {
@@ -112,14 +104,14 @@ navBotoes.forEach((botao) => {
   });
 });
 
-mostrarView('tarefas'); // tela inicial, ao carregar a página
+mostrarView('tarefas');
 
 // ---------- Perfil ----------
 
 document.getElementById('perfil-membro-desde').textContent =
   `Membro desde ${new Date().toLocaleDateString('pt-BR')}`;
 
-// ---------- Envio do formulário (cria OU edita, dependendo do modo) ----------
+
 
 formTarefa.addEventListener('submit', (event) => {
   event.preventDefault();
@@ -132,7 +124,7 @@ formTarefa.addEventListener('submit', (event) => {
   };
 
   if (tarefaEmEdicao) {
-    // Modo edição: mantém o status atual da tarefa (o modal não mexe nisso)
+
     const novosDados = {
       ...dadosFormulario,
       status: dadosEmEdicao.status
@@ -140,7 +132,7 @@ formTarefa.addEventListener('submit', (event) => {
     renderizarTask(tarefaEmEdicao, novosDados);
     animarSalvo(tarefaEmEdicao);
   } else {
-    // Modo criação: toda tarefa nova começa como "Não iniciado"
+
     criarTarefa({
       ...dadosFormulario,
       status: 'Não iniciado'
@@ -150,21 +142,18 @@ formTarefa.addEventListener('submit', (event) => {
   fecharModal();
 });
 
-// ---------- Utilitários de data ----------
 
-// Converte "2026-07-01" (formato do input date) para "01/07/2026" (formato exibido)
+
 function formatarData(dataISO) {
   const [ano, mes, dia] = dataISO.split('-');
   return `${dia}/${mes}/${ano}`;
 }
 
-// Converte "01/07/2026" (formato exibido) para "2026-07-01" (formato exigido pelo input date)
 function converterParaISO(dataBR) {
   const [dia, mes, ano] = dataBR.split('/');
   return `${ano}-${mes}-${dia}`;
 }
 
-// ---------- Cor do status ----------
 
 function aplicarCorStatus(elementoStatus, status) {
   elementoStatus.classList.remove('status-finalizado', 'status-iniciado', 'status-nao-iniciado');
@@ -181,7 +170,6 @@ function aplicarCorStatus(elementoStatus, status) {
   }
 }
 
-// ---------- Cor da dificuldade ----------
 
 function aplicarCorDificuldade(elementoDificuldade, dificuldade) {
   elementoDificuldade.classList.remove('dificuldade-facil', 'dificuldade-medio', 'dificuldade-dificil');
@@ -198,37 +186,27 @@ function aplicarCorDificuldade(elementoDificuldade, dificuldade) {
   }
 }
 
-// ---------- Ciclo de status (clique direto na interface) ----------
 
-// Ordem em que o status avança a cada clique
 const ORDEM_STATUS = ['Não iniciado', 'Iniciado', 'Finalizado'];
 
 function proximoStatus(statusAtual) {
   const indexAtual = ORDEM_STATUS.indexOf(statusAtual);
-  // Se por algum motivo o status atual não estiver na lista, começa do início
+
   const proximoIndex = indexAtual === -1 ? 0 : (indexAtual + 1) % ORDEM_STATUS.length;
   return ORDEM_STATUS[proximoIndex];
 }
 
-// ---------- Animação de "salvo" ----------
 
 function animarSalvo(task) {
-  // Remove a classe antes de reaplicar, para garantir que a animação
-  // rode de novo mesmo se a task já tiver sido salva recentemente
+
   task.classList.remove('task-salva');
-  void task.offsetWidth; // força o navegador a "recalcular" o layout (reflow),
-                         // o que permite reiniciar a animação do zero
+  void task.offsetWidth; 
   task.classList.add('task-salva');
 
-  // Remove a classe sozinha quando a animação terminar, para não deixá-la
-  // "presa" no elemento (o que impediria a animação de rodar de novo depois)
   task.addEventListener('animationend', () => {
     task.classList.remove('task-salva');
   }, { once: true });
 }
-
-// ---------- Histórico de tarefas concluídas ----------
-
 function arquivarNoHistorico(dados) {
   historico.unshift({
     titulo: dados.titulo,
@@ -252,28 +230,23 @@ function renderizarHistorico() {
   `).join('');
 }
 
-// ---------- Animação de saída (remover tarefa) ----------
+
 
 function removerTask(task, dados) {
-  // Se a tarefa já estava "Finalizada", ela vira um registro no Histórico
-  // em vez de simplesmente desaparecer
+  
   if (dados.status === 'Finalizado') {
     arquivarNoHistorico(dados);
   }
 
-  // Fixa a altura ATUAL da task em pixels (em vez de "auto"),
-  // porque o CSS só consegue animar transition entre valores numéricos —
-  // não é possível fazer transition de "auto" até "0".
+
   const alturaAtual = task.getBoundingClientRect().height;
   task.style.height = alturaAtual + 'px';
 
-  void task.offsetWidth; // força reflow, garantindo que o navegador registre
-                         // a altura fixada acima ANTES de iniciarmos a transição
+  void task.offsetWidth; 
 
   task.classList.add('task-saindo');
 
-  // Só remove a task do DOM (e atualiza o contador) depois que a
-  // transição de saída realmente terminar
+
   task.addEventListener('transitionend', () => {
     task.remove();
     totalTarefas--;
@@ -282,7 +255,7 @@ function removerTask(task, dados) {
   }, { once: true });
 }
 
-// ---------- Criar tarefa ----------
+
 
 function criarTarefa(dados) {
   const task = document.createElement('div');
@@ -290,13 +263,13 @@ function criarTarefa(dados) {
 
   renderizarTask(task, dados);
 
-  moverTaskParaGrupo(task, dados.status); // já dispara a animação de entrada
+  moverTaskParaGrupo(task, dados.status); 
 
   totalTarefas++;
   atualizarContador();
 }
 
-// ---------- Renderizar a task (usada na criação e após editar) ----------
+
 
 function renderizarTask(task, dados) {
   task.innerHTML = `
@@ -333,14 +306,13 @@ function renderizarTask(task, dados) {
   const dificuldadeEl = task.querySelector('.dificult');
   aplicarCorDificuldade(dificuldadeEl, dados.dificuldade);
 
-  // Clicar no status avança para o próximo estado do ciclo
+
   statusEl.addEventListener('click', () => {
     dados.status = proximoStatus(dados.status);
     statusEl.textContent = dados.status;
     aplicarCorStatus(statusEl, dados.status);
     animarMudancaStatus(statusEl);
 
-    // Move a task para a seção correspondente ao novo status
     moverTaskParaGrupo(task, dados.status);
   });
 
@@ -356,7 +328,7 @@ function renderizarTask(task, dados) {
   });
 }
 
-// ---------- Animação ao mudar o status ----------
+
 
 function animarMudancaStatus(elementoStatus) {
   elementoStatus.classList.remove('status-alterado');
@@ -368,11 +340,11 @@ function animarMudancaStatus(elementoStatus) {
   }, { once: true });
 }
 
-// ---------- Animação de entrada da task no grupo ----------
+
 
 function animarEntradaTask(task) {
   task.classList.remove('task-entrando');
-  void task.offsetWidth; // força reflow, permitindo reiniciar a animação
+  void task.offsetWidth; 
   task.classList.add('task-entrando');
 
   task.addEventListener('animationend', () => {
@@ -380,18 +352,13 @@ function animarEntradaTask(task) {
   }, { once: true });
 }
 
-// ---------- Grupos por status ----------
-
-// Mapeia cada status ao seu container correspondente no HTML
 const GRUPOS = {
   'Finalizado': document.getElementById('lista-finalizado'),
   'Iniciado': document.getElementById('lista-iniciado'),
   'Não iniciado': document.getElementById('lista-nao-iniciado')
 };
 
-// Move (ou insere pela primeira vez) a task para dentro do grupo do status atual.
-// appendChild em um elemento que já está no DOM não o duplica — ele apenas
-// é "desconectado" de onde estava e reconectado no novo lugar.
+
 function moverTaskParaGrupo(task, status) {
   const grupo = GRUPOS[status];
   if (grupo) {
@@ -401,7 +368,7 @@ function moverTaskParaGrupo(task, status) {
   atualizarVisibilidadeGrupos();
 }
 
-// Esconde a seção inteira (título + lista) quando ela não tem nenhuma task dentro
+
 function atualizarVisibilidadeGrupos() {
   document.querySelectorAll('.task-group').forEach((secao) => {
     const lista = secao.querySelector('.group-list');
@@ -409,25 +376,18 @@ function atualizarVisibilidadeGrupos() {
   });
 }
 
-// Roda uma vez ao carregar a página, para que seções sem nenhuma task
-// já comecem escondidas (em vez de aparecerem vazias até a primeira ação).
-// Desativamos a transição momentaneamente para que essa checagem inicial
-// não dispare a animação de colapso visível no primeiro instante da página.
 document.querySelectorAll('.task-group').forEach((secao) => {
   secao.classList.add('sem-transicao');
 });
 
 atualizarVisibilidadeGrupos();
 
-// Reativa a transição no próximo quadro de renderização, para que só
-// mudanças de status DAQUI PRA FRENTE animem normalmente
 requestAnimationFrame(() => {
   document.querySelectorAll('.task-group').forEach((secao) => {
     secao.classList.remove('sem-transicao');
   });
 });
 
-// ---------- Contador ----------
 
 function atualizarContador() {
   contador.textContent = `${totalTarefas} Tarefas`;
