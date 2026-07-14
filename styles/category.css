@@ -16,6 +16,7 @@
 #count {
   margin: 20px 20px 20px 20px;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 @keyframes entrarTask {
@@ -48,7 +49,8 @@
   pointer-events: none;
 }
 
-.task-group.sem-transicao {
+.task-group.sem-transicao,
+.task-group.sem-transicao .group-title {
   transition: none;
 }
 

@@ -15,6 +15,18 @@ const inputPrazo = document.getElementById('input-prazo');
 
 let totalTarefas = 0;
 
+// Navegação entre telas
+const navBotoes = document.querySelectorAll('.nav-icon');
+const views = {
+  tarefas: document.getElementById('view-tarefas'),
+  perfil: document.getElementById('view-perfil'),
+  historico: document.getElementById('view-historico')
+};
+
+// Histórico de tarefas concluídas
+const listaHistorico = document.getElementById('historico-lista');
+let historico = [];
+
 // Controla se o modal está criando uma tarefa nova ou editando uma existente.
 // null = modo criação. Uma referência à div.task = modo edição.
 let tarefaEmEdicao = null;
@@ -68,6 +80,44 @@ modalOverlay.addEventListener('click', (event) => {
     fecharModal();
   }
 });
+
+// ---------- Navegação entre Tarefas / Perfil / Histórico ----------
+
+function mostrarView(nomeView) {
+  Object.entries(views).forEach(([nome, secao]) => {
+    secao.hidden = nome !== nomeView;
+  });
+
+  animarEntradaView(views[nomeView]);
+
+  navBotoes.forEach((botao) => {
+    botao.classList.toggle('ativo', botao.dataset.view === nomeView);
+  });
+}
+
+// Fade + leve deslize toda vez que uma tela é exibida
+function animarEntradaView(secao) {
+  secao.classList.remove('view-entrando');
+  void secao.offsetWidth; // força reflow, permitindo reiniciar a animação
+  secao.classList.add('view-entrando');
+
+  secao.addEventListener('animationend', () => {
+    secao.classList.remove('view-entrando');
+  }, { once: true });
+}
+
+navBotoes.forEach((botao) => {
+  botao.addEventListener('click', () => {
+    mostrarView(botao.dataset.view);
+  });
+});
+
+mostrarView('tarefas'); // tela inicial, ao carregar a página
+
+// ---------- Perfil ----------
+
+document.getElementById('perfil-membro-desde').textContent =
+  `Membro desde ${new Date().toLocaleDateString('pt-BR')}`;
 
 // ---------- Envio do formulário (cria OU edita, dependendo do modo) ----------
 
@@ -131,6 +181,23 @@ function aplicarCorStatus(elementoStatus, status) {
   }
 }
 
+// ---------- Cor da dificuldade ----------
+
+function aplicarCorDificuldade(elementoDificuldade, dificuldade) {
+  elementoDificuldade.classList.remove('dificuldade-facil', 'dificuldade-medio', 'dificuldade-dificil');
+
+  const mapaDificuldade = {
+    'Fácil': 'dificuldade-facil',
+    'Médio': 'dificuldade-medio',
+    'Difícil': 'dificuldade-dificil'
+  };
+
+  const classe = mapaDificuldade[dificuldade];
+  if (classe) {
+    elementoDificuldade.classList.add(classe);
+  }
+}
+
 // ---------- Ciclo de status (clique direto na interface) ----------
 
 // Ordem em que o status avança a cada clique
@@ -160,9 +227,40 @@ function animarSalvo(task) {
   }, { once: true });
 }
 
+// ---------- Histórico de tarefas concluídas ----------
+
+function arquivarNoHistorico(dados) {
+  historico.unshift({
+    titulo: dados.titulo,
+    data: dados.data,
+    arquivadoEm: new Date().toLocaleDateString('pt-BR')
+  });
+  renderizarHistorico();
+}
+
+function renderizarHistorico() {
+  if (historico.length === 0) {
+    listaHistorico.innerHTML = '<p class="historico-vazio">Nenhuma tarefa concluída arquivada ainda.</p>';
+    return;
+  }
+
+  listaHistorico.innerHTML = historico.map((item) => `
+    <div class="historico-item">
+      <p class="historico-titulo">${item.titulo}</p>
+      <p class="historico-data">Concluída em ${item.data} • arquivada em ${item.arquivadoEm}</p>
+    </div>
+  `).join('');
+}
+
 // ---------- Animação de saída (remover tarefa) ----------
 
-function removerTask(task) {
+function removerTask(task, dados) {
+  // Se a tarefa já estava "Finalizada", ela vira um registro no Histórico
+  // em vez de simplesmente desaparecer
+  if (dados.status === 'Finalizado') {
+    arquivarNoHistorico(dados);
+  }
+
   // Fixa a altura ATUAL da task em pixels (em vez de "auto"),
   // porque o CSS só consegue animar transition entre valores numéricos —
   // não é possível fazer transition de "auto" até "0".
@@ -232,6 +330,9 @@ function renderizarTask(task, dados) {
   const statusEl = task.querySelector('.status p');
   aplicarCorStatus(statusEl, dados.status);
 
+  const dificuldadeEl = task.querySelector('.dificult');
+  aplicarCorDificuldade(dificuldadeEl, dados.dificuldade);
+
   // Clicar no status avança para o próximo estado do ciclo
   statusEl.addEventListener('click', () => {
     dados.status = proximoStatus(dados.status);
@@ -251,7 +352,7 @@ function renderizarTask(task, dados) {
   });
 
   btnRemover.addEventListener('click', () => {
-    removerTask(task);
+    removerTask(task, dados);
   });
 }
 
@@ -309,8 +410,22 @@ function atualizarVisibilidadeGrupos() {
 }
 
 // Roda uma vez ao carregar a página, para que seções sem nenhuma task
-// já comecem escondidas (em vez de aparecerem vazias até a primeira ação)
+// já comecem escondidas (em vez de aparecerem vazias até a primeira ação).
+// Desativamos a transição momentaneamente para que essa checagem inicial
+// não dispare a animação de colapso visível no primeiro instante da página.
+document.querySelectorAll('.task-group').forEach((secao) => {
+  secao.classList.add('sem-transicao');
+});
+
 atualizarVisibilidadeGrupos();
+
+// Reativa a transição no próximo quadro de renderização, para que só
+// mudanças de status DAQUI PRA FRENTE animem normalmente
+requestAnimationFrame(() => {
+  document.querySelectorAll('.task-group').forEach((secao) => {
+    secao.classList.remove('sem-transicao');
+  });
+});
 
 // ---------- Contador ----------
 

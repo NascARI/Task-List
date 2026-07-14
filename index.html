@@ -12,31 +12,85 @@
   <link rel="stylesheet" href="styles/index.css">
 </head>
 <body class="conteiner">
-  <header>
-    <div>
-      <span id="Title"> Task list </span>
-      <button type="button" id="primary-btn">Nova Tarefa +</button>
-    </div>
-  </header>
 
-  <main>
-    <section class="task-group" data-status="Finalizado">
-      <h2 class="group-title">Tarefas Finalizadas</h2>
-      <div class="group-list" id="lista-finalizado"></div>
+  <nav class="app-nav">
+    <button type="button" class="nav-icon" id="nav-tarefas" data-view="tarefas" title="Tarefas" aria-label="Tarefas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>
+        <path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/>
+      </svg>
+    </button>
+
+    <button type="button" class="nav-icon" id="nav-historico" data-view="historico" title="Histórico" aria-label="Histórico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    </button>
+
+    <button type="button" class="nav-icon nav-avatar" id="nav-perfil" data-view="perfil" title="Perfil" aria-label="Perfil">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="card">
+
+    <section class="view" id="view-tarefas">
+      <div class="view-header">
+        <span id="Title">Task list</span>
+        <button type="button" id="primary-btn">Nova Tarefa +</button>
+      </div>
+
+      <main>
+        <section class="task-group" data-status="Finalizado">
+          <h2 class="group-title">Tarefas Finalizadas</h2>
+          <div class="group-list" id="lista-finalizado"></div>
+        </section>
+
+        <section class="task-group" data-status="Iniciado">
+          <h2 class="group-title">Tarefas Iniciadas</h2>
+          <div class="group-list" id="lista-iniciado"></div>
+        </section>
+
+        <section class="task-group" data-status="Não iniciado">
+          <h2 class="group-title">Tarefas Não Iniciadas</h2>
+          <div class="group-list" id="lista-nao-iniciado"></div>
+        </section>
+
+        <p id="count">0 Tarefas</p>
+      </main>
     </section>
 
-    <section class="task-group" data-status="Iniciado">
-      <h2 class="group-title">Tarefas Iniciadas</h2>
-      <div class="group-list" id="lista-iniciado"></div>
+    <section class="view" id="view-perfil" hidden>
+      <div class="view-header">
+        <span>Perfil</span>
+      </div>
+
+      <div class="perfil-content">
+        <div class="avatar-grande"></div>
+
+        <label for="perfil-nome">Nome</label>
+        <input type="text" id="perfil-nome" value="Ariel">
+
+        <label for="perfil-email">E-mail</label>
+        <input type="email" id="perfil-email" value="ariel@email.com">
+
+        <p class="perfil-info" id="perfil-membro-desde"></p>
+      </div>
     </section>
 
-    <section class="task-group" data-status="Não iniciado">
-      <h2 class="group-title">Tarefas Não Iniciadas</h2>
-      <div class="group-list" id="lista-nao-iniciado"></div>
+    <section class="view" id="view-historico" hidden>
+      <div class="view-header">
+        <span>Histórico</span>
+      </div>
+
+      <div class="historico-lista" id="historico-lista">
+        <p class="historico-vazio">Nenhuma tarefa concluída arquivada ainda.</p>
+      </div>
     </section>
 
-    <p id="count">0 Tarefas</p>
-  </main>
+  </div>
 
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal">
@@ -53,9 +107,9 @@
           <div class="modal-field">
             <label for="input-dificuldade">Dificuldade</label>
             <select id="input-dificuldade">
-              <option value="Fácil">Fácil</option>
-              <option value="Médio">Médio</option>
-              <option value="Difícil">Difícil</option>
+              <option value="Fácil" id="easy">Fácil</option>
+              <option value="Médio" id="medium" >Médio</option>
+              <option value="Difícil" id="hard" >Difícil</option>
             </select>
           </div>
 

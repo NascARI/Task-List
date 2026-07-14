@@ -1,15 +1,14 @@
-
 .task {
-  width: 450px;
-  height: 120px;
+  width: calc(100% - 40px);
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 24px;
-  background-color: #d9d5db; 
+  padding: 28px;
+  background-color: #d9d5db;
   border-radius: 8px;
-  font-size: 0.5rem;
+  font-size: 0.85rem;
   margin: 20px 20px 0px 20px;
+  box-sizing: border-box;
 }
 
 
@@ -20,23 +19,23 @@
 }
 
 .task-title-group h1 {
-  margin: 0 0 4px 0;
-  font-size: 1.4rem;
+  margin: 0 0 6px 0;
+  font-size: 1.3rem;
   color: #4b3f66;
-  font-size: 1rem;
 }
 
 .task-title-group h3 {
   margin: 0;
   font-weight: 400;
   color: #8b8394;
-  font-size: 0.5rem;
+  font-size: 0.85rem;
 }
 
 
 .status p {
   margin: 0;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .status-finalizado {
@@ -65,11 +64,23 @@
 }
 
 .dificult {
-  background-color: #8c7fc4;
   color: #fff;
   padding: 8px 20px;
   border-radius: 6px;
   font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.dificuldade-facil {
+  background-color: #A3A0C3;
+}
+
+.dificuldade-medio {
+  background-color: #6C698D;
+}
+
+.dificuldade-dificil {
+  background-color: #2C285E;
 }
 
 .dificult p {
@@ -79,6 +90,7 @@
 .term p {
   margin: 0;
   color: #6b6472;
+  font-size: 0.8rem;
 }
 
 .task-actions {
@@ -90,12 +102,14 @@
   margin: 0;
   color: #6b6472;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .remove p {
   margin: 0;
   color: #d9534f;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .status p {
@@ -111,4 +125,12 @@
   transform: scale(1.05);
   box-shadow: 0 0 0 3px rgba(140, 127, 196, 0.4);
   outline: none;
+}
+
+#hard {
+  background-color: #2C285E;
+}
+
+#easy {
+  background-color: #A3A0C3;
 }
