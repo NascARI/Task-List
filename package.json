@@ -1,0 +1,29 @@
+{
+  "name": "task-list",
+  "version": "1.0.0",
+  "description": "Aplicação simples de lista de tarefas (To-Do List) feita em HTML, CSS e JavaScript puro (vanilla), sem frameworks ou bibliotecas externas. Permite criar, editar, remover e categorizar tarefas por status, com animações de transição em toda a interface.",
+  "main": "scripts.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NascARI/Task-List.git"
+  },
+  "keywords": [],
+  "author": "Ariel Nask",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NascARI/Task-List/issues"
+  },
+  "homepage": "https://github.com/NascARI/Task-List#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}

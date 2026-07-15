@@ -10,7 +10,9 @@ const inputDescricao = document.getElementById('input-descricao');
 const inputDificuldade = document.getElementById('input-dificuldade');
 const inputPrazo = document.getElementById('input-prazo');
 
-let totalTarefas = 0;
+let totalTarefas = [];
+
+
 
 const navBotoes = document.querySelectorAll('.nav-icon');
 const views = {
@@ -260,13 +262,17 @@ function removerTask(task, dados) {
 function criarTarefa(dados) {
   const task = document.createElement('div');
   task.className = 'task';
-
+ 
+  tarefas.push(novaTarefa);
+  salvarNoLocalStorage();
   renderizarTask(task, dados);
 
   moverTaskParaGrupo(task, dados.status); 
 
   totalTarefas++;
   atualizarContador();
+
+  
 }
 
 
@@ -326,6 +332,7 @@ function renderizarTask(task, dados) {
   btnRemover.addEventListener('click', () => {
     removerTask(task, dados);
   });
+
 }
 
 
